@@ -28,6 +28,18 @@ class UserController {
     const users = await UserRepositoreis.findAll(oderBy);
     response.json(users);
   }
+
+  async show(request, response) {
+    const { id } = request.body;
+
+    const user = await UserRepositoreis.findById(id);
+
+    if (!user) {
+      return response.status(404).json({ error: 'User Not Found' });
+    }
+
+    response.json(user);
+  }
 }
 
 module.exports = new UserController();

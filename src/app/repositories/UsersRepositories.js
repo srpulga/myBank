@@ -28,6 +28,14 @@ class ContactsRepositories {
     `, [email]);
     return row;
   }
+
+  async findById(id) {
+    const [row] = await db.query(`
+      SELECT * FROM users
+      WHERE id = $1
+    `, [id]);
+    return row;
+  }
 }
 
 module.exports = new ContactsRepositories();
