@@ -1,5 +1,5 @@
 CREATE DATABASE myBank;
-
+DROP DATABASE mybank;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE IF NOT EXISTS categories (
@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR UNIQUE,
   phone VARCHAR,
   balance VARCHAR,
+  income VARCHAR,
   category_id UUID,
   FOREIGN KEY(category_id) REFERENCES categories(id)
 );

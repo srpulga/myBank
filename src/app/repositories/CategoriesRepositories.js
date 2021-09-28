@@ -6,45 +6,57 @@ function checkIfValidUUID(str) {
 
   return regexExp.test(str);
 }
-class UserRepository {
+
+class CategoriesRepository {
   async create({
-    name, email, phone, balance, income, category_id,
+    name,
   }) {
     const [row] = await db.query(`
-      INSERT INTO users(name, email, phone, balance, income, category_id)
-      VALUES($1, $2, $3, $4, $5, $6)
+      INSERT INTO categories(name)
+      VALUES($1)
       RETURNING *
-    `, [name, email, phone, balance, income, category_id]);
+    `, [name]);
     return row;
   }
 
   async findAll(orderBy = 'ASC') {
     const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
     const rows = await db.query(`
-      SELECT * FROM users
+      SELECT * FROM categories
       ORDER BY name ${direction}
     `);
     return rows;
   }
 
-  async findByEmail(email) {
-    const [row] = await db.query(`
-      SELECT * FROM users
-      WHERE email = $1
-    `, [email]);
-    return row;
-  }
-
   async findById(id) {
     if (checkIfValidUUID(id)) {
       const [row] = await db.query(`
-      SELECT * FROM users
+      SELECT *
+      FROM categories
       WHERE id = $1
     `, [id]);
       return row;
     }
     return undefined;
   }
+
+  async findByName(name) {
+    const [row] = await db.query(`
+      SELECT *
+      FROM categories
+      WHERE name = $1
+    `, [name]);
+    return row;
+  }
+
+  async delete(id) {
+    const deleteOp = await db.query(`
+      DELETE
+      FROM categories
+      WHERE id = $1
+     `, [id]);
+    return deleteOp;
+  }
 }
 
-module.exports = new UserRepository();
+module.exports = new CategoriesRepository();
